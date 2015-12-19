@@ -98,13 +98,17 @@ class MailgunBackend(BaseEmailBackend):
         if not email_message.recipients():
             return False
         from_email = sanitize_address(email_message.from_email, email_message.encoding)
-        recipients = [sanitize_address(addr, email_message.encoding)
-                      for addr in email_message.recipients()]
-
+        to_recip = [sanitize_address(addr, email_message.encoding)
+                      for addr in email_message.to]
+    
+        bcc_recip = [sanitize_address(addr, email_message.encoding)
+                      for addr in email_message.bcc]
+    
         try:
-
+    
             post_data = []
-            post_data.append(('to', (",".join(recipients)),))
+            post_data.append(('to', (",".join(to_recip)),))
+            post_data.append(('bcc', (",".join(bcc_recip)),))
             post_data.append(('text', email_message.body,))
             post_data.append(('subject', email_message.subject,))
             post_data.append(('from', from_email,))
