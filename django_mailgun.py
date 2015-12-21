@@ -108,7 +108,8 @@ class MailgunBackend(BaseEmailBackend):
 
             post_data = []
             post_data.append(('to', (",".join(to_recipients)),))
-            post_data.append(('bcc', (",".join(bcc_recipients)),))
+            if bcc_recipients:
+                post_data.append(('bcc', (",".join(bcc_recipients)),))
             post_data.append(('text', email_message.body,))
             post_data.append(('subject', email_message.subject,))
             post_data.append(('from', from_email,))
