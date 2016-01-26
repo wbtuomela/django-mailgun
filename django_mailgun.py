@@ -101,14 +101,12 @@ class MailgunBackend(BaseEmailBackend):
 
         to_recipients = [sanitize_address(addr, email_message.encoding)
                       for addr in email_message.to]
-        bcc_recipients = [sanitize_address(addr, email_message.encoding)
-                      for addr in email_message.bcc]
 
         try:
-
             post_data = []
             post_data.append(('to', (",".join(to_recipients)),))
-            if bcc_recipients:
+            if email_message.bcc:
+                bcc_recipients = [sanitize_address(addr, email_message.encoding) for addr in email_message.bcc]
                 post_data.append(('bcc', (",".join(bcc_recipients)),))
             post_data.append(('text', email_message.body,))
             post_data.append(('subject', email_message.subject,))
